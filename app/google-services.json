@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "321635324010",
+    "project_id": "aarogyam-31",
+    "storage_bucket": "aarogyam-31.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:321635324010:android:f783e288e70232d256ba13",
+        "android_client_info": {
+          "package_name": "com.vigyat.fitnessappprototype"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDaLOhSOamzcwstA_fYijUCAEwyQbkkjnI"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
