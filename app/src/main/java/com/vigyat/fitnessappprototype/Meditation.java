@@ -37,12 +37,16 @@ public class Meditation extends AppCompatActivity {
             public void onClick(View v) {
 
                         if (isTimerRunning) {
+
+                            btn.setImageResource(R.drawable.ic_play);
                             mediaPlayer.stop();
                             mediaPlayer.release();
                             mediaPlayer = null;
                             // Pause the timer
                             countDownTimer.cancel();
                         } else {
+                            btn.setImageResource(R.drawable.ic_pause);
+
 
                             mediaPlayer = MediaPlayer.create(getApplicationContext(),R.raw.meditation_music);
                             mediaPlayer.start();
