@@ -5,8 +5,6 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.os.Bundle;
-import android.view.View;
-import android.widget.TextView;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -26,7 +24,7 @@ public class MentalHealth extends AppCompatActivity {
         helpLineList = new ArrayList<>();
 
         GovtHelpLineModal helpLine1 = new GovtHelpLineModal(R.drawable.ic_launcher_background,"Suicide","https://www.google.com/search?q=how+to+suicide&oq=how+to+sui&gs_lcrp=EgZjaHJvbWUqBggBEEUYOzIGCAAQRRg5MgYIARBFGDsyBwgCEAAYgAQyBwgDEAAYgAQyBwgEEAAYgATSAQgzMTE5ajBqOagCALACAA&client=ms-android-xiaomi-rvo2b&sourceid=chrome-mobile&ie=UTF-8");
-        GovtHelpLineModal helpLine2 = new GovtHelpLineModal(R.drawable.ic_launcher_background,"Suicide","https://www.apple.com/in/");
+        GovtHelpLineModal helpLine2 = new GovtHelpLineModal(R.drawable.ic_launcher_background,"Suicide","https://www.x.com");
 
 
         helpLineList.add(helpLine1);
