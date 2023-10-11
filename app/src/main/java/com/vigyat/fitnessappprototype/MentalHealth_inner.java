@@ -30,6 +30,7 @@ public class MentalHealth_inner extends AppCompatActivity {
 
                 Intent i = new Intent(getApplicationContext(), Meditation.class);
                 startActivity(i);
+
             }
         });
 
@@ -38,6 +39,7 @@ public class MentalHealth_inner extends AppCompatActivity {
             public void onClick(View v) {
                 Intent i = new Intent(getApplicationContext(), MentalHealth.class);
                 startActivity(i);
+
             }
         });
 

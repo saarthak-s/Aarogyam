@@ -7,6 +7,7 @@
     <color name="teal_700" >#FF018786</color>
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>|
+    <color name="green">#74bc55</color>
 
     <color name="back_color">#333949</color>
     <color name="txt_color">#7C8290</color>
@@ -15,6 +16,8 @@
     <color name="textColorDark">#FFFFFF</color> <!-- White for dark theme -->
     <color name="colorPrimaryLight">#FFFFFF</color> <!-- White as an example -->
     <color name="colorSecondaryLight">#FFC107</color> <!-- Customize as needed -->
+
+
 
 
 </resources>

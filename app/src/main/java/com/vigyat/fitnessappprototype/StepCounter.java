@@ -1,10 +1,6 @@
 package com.vigyat.fitnessappprototype;
-
 import androidx.appcompat.app.AppCompatActivity;
-
 import android.content.Context;
-
-import android.content.SharedPreferences;
 import android.hardware.Sensor;
 import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
@@ -14,10 +10,14 @@ import android.util.Log;
 import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
-
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
-
 import java.util.ArrayList;
+import com.google.android.gms.fitness.FitnessOptions;
+import com.google.android.gms.fitness.data.DataType;
+import com.google.android.gms.auth.api.signin.GoogleSignIn;
+
+import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
+//import com.google.android.gms.common.api.GoogleSignInAccount;
 
 
 public class StepCounter extends AppCompatActivity implements SensorEventListener {
@@ -32,6 +32,8 @@ public class StepCounter extends AppCompatActivity implements SensorEventListene
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+
+
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_step_counter);
         sensorManager = (SensorManager) getSystemService(Context.SENSOR_SERVICE);

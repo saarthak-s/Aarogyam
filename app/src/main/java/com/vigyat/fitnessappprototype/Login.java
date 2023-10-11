@@ -16,6 +16,7 @@ import android.app.Activity;
 import android.content.Intent;
 import android.content.IntentSender;
 import android.os.Bundle;
+import android.text.InputType;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
@@ -56,10 +57,9 @@ public class Login extends AppCompatActivity {
     FirebaseAuth mAuth;
 
     ProgressBar progressBar;
-    TextView registerNow;
+    TextView registerNow, forgotPassword;
 
-
-
+    ImageView eye;
 
 
     @Override
@@ -86,6 +86,34 @@ public class Login extends AppCompatActivity {
         buttonLogin = findViewById(R.id.LoginBtn);
         progressBar = findViewById(R.id.progressBar);
         registerNow = findViewById(R.id.registerNow);
+        forgotPassword = findViewById(R.id.forgotPassword);
+
+        eye = findViewById(R.id.cEye);
+
+
+        eye.setOnClickListener(v -> {
+            if (editTextPassword.getInputType() == (InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_PASSWORD)) {
+                editTextPassword.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_VISIBLE_PASSWORD);
+                eye.setImageResource(R.drawable.ic_eye_hide);
+            } else {
+                editTextPassword.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_PASSWORD);
+                eye.setImageResource(R.drawable.ic_eye_open);
+            }
+            editTextPassword.setSelection(editTextPassword.getText().length());
+            v.setFocusable(true);
+            v.setFocusableInTouchMode(true);
+            v.requestFocus();
+        });
+
+        forgotPassword.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+                Intent intent = new Intent(getApplicationContext(), ResetPassword.class);
+                startActivity(intent);
+                finish();
+            }
+        });
 
         registerNow.setOnClickListener(new View.OnClickListener() {
             @Override

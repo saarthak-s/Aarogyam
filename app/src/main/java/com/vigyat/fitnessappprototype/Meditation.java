@@ -31,6 +31,7 @@ public class Meditation extends AppCompatActivity {
         timerTextView = findViewById(R.id.timerTextView);
         btn = findViewById(R.id.btn);
         mediaPlayer = MediaPlayer.create(getApplicationContext(),R.raw.meditation_music);
+        //progressBar.setProgress(0);
 
         btn.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -44,8 +45,10 @@ public class Meditation extends AppCompatActivity {
                             mediaPlayer = null;
                             // Pause the timer
                             countDownTimer.cancel();
+
                         } else {
                             btn.setImageResource(R.drawable.ic_pause);
+
 
 
                             mediaPlayer = MediaPlayer.create(getApplicationContext(),R.raw.meditation_music);
@@ -56,6 +59,18 @@ public class Meditation extends AppCompatActivity {
                         isTimerRunning = !isTimerRunning;
             }
         });
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        if (mediaPlayer != null) {
+            mediaPlayer.stop();
+            mediaPlayer.release();
+            mediaPlayer = null;
+            progressBar.setVisibility(View.GONE);
+
+        }
     }
 
     private void startTimer() {
@@ -82,5 +97,6 @@ public class Meditation extends AppCompatActivity {
                 progressBar.setProgress(100);
             }
         }.start();
+        progressBar.setProgress(0);
     }
 }

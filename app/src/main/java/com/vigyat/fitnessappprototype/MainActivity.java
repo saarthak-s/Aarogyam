@@ -59,6 +59,7 @@ public class MainActivity extends AppCompatActivity {
             Intent i = new Intent(getApplicationContext(), Login.class);
             startActivity(i);
             finish();
+
         }
 
 
@@ -85,6 +86,7 @@ public class MainActivity extends AppCompatActivity {
                 Intent i1 = new Intent(getApplicationContext(), MentalHealth_inner.class);
                 startActivity(i1);
 
+
             }
         });
 
@@ -94,6 +96,7 @@ public class MainActivity extends AppCompatActivity {
 
                 Intent i = new Intent(getApplicationContext(), StepCounter.class);
                 startActivity(i);
+
 
             }
         });
