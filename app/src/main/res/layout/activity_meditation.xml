@@ -14,6 +14,7 @@
         android:layout_marginTop="52dp"
         android:fontFamily="@font/cutive"
         android:text="Meditation"
+        android:autoSizeTextType="uniform"
         android:textAlignment="center"
         android:textSize="40sp"
         app:layout_constraintEnd_toEndOf="parent"
@@ -25,6 +26,7 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="40dp"
         android:fontFamily="@font/cutive"
+        android:autoSizeTextType="uniform"
         android:text="Welcome to the meditation session.\n\n\nFind a quiet and comfortable space to begin."
         android:textAlignment="center"
         android:textSize="16sp"
@@ -69,7 +71,9 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.504"
-        app:layout_constraintStart_toStartOf="parent" />
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/progressBar"
+        app:layout_constraintVertical_bias="1.0" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

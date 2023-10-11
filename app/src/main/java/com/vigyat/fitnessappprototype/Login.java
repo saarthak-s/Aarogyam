@@ -94,10 +94,10 @@ public class Login extends AppCompatActivity {
         eye.setOnClickListener(v -> {
             if (editTextPassword.getInputType() == (InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_PASSWORD)) {
                 editTextPassword.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_VISIBLE_PASSWORD);
-                eye.setImageResource(R.drawable.ic_eye_hide);
+                eye.setImageResource(R.drawable.ic_eye_open);
             } else {
                 editTextPassword.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_PASSWORD);
-                eye.setImageResource(R.drawable.ic_eye_open);
+                eye.setImageResource(R.drawable.ic_eye_hide);
             }
             editTextPassword.setSelection(editTextPassword.getText().length());
             v.setFocusable(true);
