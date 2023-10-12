@@ -8,6 +8,7 @@ import android.hardware.SensorManager;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
@@ -30,6 +31,8 @@ public class StepCounter extends AppCompatActivity implements SensorEventListene
     private boolean running = false; // Initialize running to false
     private int lastStepCount = 0; // Initialize the last recorded step count to zero
 
+    private ProgressBar progressBar;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
 
@@ -44,6 +47,7 @@ public class StepCounter extends AppCompatActivity implements SensorEventListene
         fab.setImageResource(R.drawable.ic_play);
 
         stepsTV.setText(String.valueOf(stepCount));
+        progressBar = findViewById(R.id.progressBar2);
 
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -83,6 +87,7 @@ public class StepCounter extends AppCompatActivity implements SensorEventListene
                 // Increment the step count for each step detected
                 stepCount++;
                 stepsTV.setText(String.valueOf(stepCount));
+                progressBar.setProgress(stepCount);
             }
         }
     }

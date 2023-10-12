@@ -29,6 +29,8 @@ public class MainActivity extends AppCompatActivity {
 
     private LinearLayout exerciseLL,stepCounterLL;
 
+
+
     private LottieAnimationView exerciseLAV, counterLAV;
     private ImageView imageView;
     FirebaseAuth auth;
@@ -64,14 +66,6 @@ public class MainActivity extends AppCompatActivity {
 
 
         imageView = findViewById(R.id.aarogyamImg);
-//        if (isDarkTheme()) {
-//            imageView.setImageResource(R.drawable.aarogyam_black);
-//        } else {
-//            imageView.setImageResource(R.drawable.aarogyam_black);
-//        }
-
-
-
 
         exerciseLL = findViewById(R.id.idLLExercise);
         stepCounterLL = findViewById(R.id.idLLstepCounter);

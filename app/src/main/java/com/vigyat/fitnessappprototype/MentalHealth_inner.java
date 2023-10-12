@@ -11,8 +11,8 @@ import com.airbnb.lottie.LottieAnimationView;
 
 public class MentalHealth_inner extends AppCompatActivity {
 
-    private LinearLayout meditation,helpline;
-    private LottieAnimationView meditationLAV, helplineLAV;
+    private LinearLayout meditation,helpline,yoga;
+    private LottieAnimationView meditationLAV, helplineLAV,yogaLAV;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -23,6 +23,8 @@ public class MentalHealth_inner extends AppCompatActivity {
         helpline = findViewById(R.id.idLLGovtPortals);
         meditationLAV = findViewById(R.id.LAVMeditation);
         helplineLAV = findViewById(R.id.idLAVGovtPortal);
+        yoga = findViewById(R.id.yogaLL);
+        yogaLAV = findViewById(R.id.yogaLAV);
 
         meditation.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -40,6 +42,15 @@ public class MentalHealth_inner extends AppCompatActivity {
                 Intent i = new Intent(getApplicationContext(), MentalHealth.class);
                 startActivity(i);
 
+            }
+        });
+
+        yoga.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+                Intent intent = new Intent(getApplicationContext(), YogaList.class);
+                startActivity(intent);
             }
         });
 
