@@ -5,4 +5,16 @@
     <string name="logout">LOGOUT</string>
     <string name="web_client_id">321635324010-5a2dhl11he1nrg6p9epur7tnhe20gcpq.apps.googleusercontent.com</string>
     <string name="enter_email_id">Enter email id</string>
+
+
+    <string-array name="step_goal_options">
+
+        <item>2000</item>
+        <item>4000</item>
+        <item>6000</item>
+        <item>8000</item>
+        <item>10000</item>
+        <!-- Add more step goal options as needed -->
+    </string-array>
+
 </resources>

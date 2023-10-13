@@ -102,7 +102,6 @@
         android:clickable="true"
         android:focusable="true"
         android:padding="10dp"
-
         android:src="@drawable/ic_eye_hide"
         app:layout_constraintBottom_toBottomOf="@+id/password"
         app:layout_constraintEnd_toEndOf="@+id/password"

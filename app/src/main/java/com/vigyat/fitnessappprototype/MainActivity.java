@@ -5,38 +5,41 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
-
+import android.hardware.Sensor;
+import android.hardware.SensorEvent;
+import android.hardware.SensorEventListener;
+import android.hardware.SensorManager;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.Manifest;
+import android.widget.Toast;
+
 import com.airbnb.lottie.LottieAnimationView;
-import com.google.android.gms.auth.api.identity.BeginSignInRequest;
-import com.google.android.gms.auth.api.identity.Identity;
-import com.google.android.gms.auth.api.identity.SignInClient;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 
-
 public class MainActivity extends AppCompatActivity {
+
+
+
+    int lastStepCount = 0;
     private static final int REQUEST_ACTIVITY_RECOGNITION_PERMISSION = 1;
 
     private LinearLayout exerciseLL,stepCounterLL;
-
-
 
     private LottieAnimationView exerciseLAV, counterLAV;
     private ImageView imageView;
     FirebaseAuth auth;
 
     FirebaseUser user;
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -64,6 +67,13 @@ public class MainActivity extends AppCompatActivity {
 
         }
 
+        SharedPreferences sharedPreferences = getSharedPreferences("StepCounterPrefs", MODE_PRIVATE);
+        // Clear the shared preference when the activity is destroyed (app is closed)
+        if (sharedPreferences != null) {
+            SharedPreferences.Editor editor = sharedPreferences.edit();
+            editor.clear(); // Clear all values in the shared preference
+            editor.apply();
+        }
 
         imageView = findViewById(R.id.aarogyamImg);
 
@@ -72,6 +82,8 @@ public class MainActivity extends AppCompatActivity {
         exerciseLAV = findViewById(R.id.LAVExercise);
         stepCounterLL = findViewById(R.id.idLLstepCounter);
 
+        Intent serviceIntent = new Intent(this, StepCounterService.class);
+        startService(serviceIntent);
 
         exerciseLL.setOnClickListener(new View.OnClickListener() {
             @Override

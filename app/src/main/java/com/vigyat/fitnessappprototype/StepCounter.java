@@ -1,100 +1,99 @@
 package com.vigyat.fitnessappprototype;
+
 import androidx.appcompat.app.AppCompatActivity;
+import android.content.BroadcastReceiver;
 import android.content.Context;
-import android.hardware.Sensor;
-import android.hardware.SensorEvent;
-import android.hardware.SensorEventListener;
-import android.hardware.SensorManager;
+import android.content.Intent;
+import android.content.IntentFilter;
+import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.ProgressBar;
+import android.widget.Spinner;
 import android.widget.TextView;
-import android.widget.Toast;
-import com.google.android.material.floatingactionbutton.FloatingActionButton;
-import java.util.ArrayList;
-import com.google.android.gms.fitness.FitnessOptions;
-import com.google.android.gms.fitness.data.DataType;
-import com.google.android.gms.auth.api.signin.GoogleSignIn;
 
-import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
-//import com.google.android.gms.common.api.GoogleSignInAccount;
+public class StepCounter extends AppCompatActivity{
 
-
-public class StepCounter extends AppCompatActivity implements SensorEventListener {
-
-    private SensorManager sensorManager;
-    private Sensor stepDetectorSensor;
+    private TextView stepGoalTV;
+    private int stepsGoal;
     private TextView stepsTV;
-    private FloatingActionButton fab;
-    private int stepCount = 0; // Initialize the step count to zero
-    private boolean running = false; // Initialize running to false
-    private int lastStepCount = 0; // Initialize the last recorded step count to zero
-
     private ProgressBar progressBar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
 
-
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_step_counter);
-        sensorManager = (SensorManager) getSystemService(Context.SENSOR_SERVICE);
-        stepDetectorSensor = sensorManager.getDefaultSensor(Sensor.TYPE_STEP_DETECTOR);
-        stepsTV = findViewById(R.id.TVSteps);
 
-        fab = findViewById(R.id.idFAB);
-        fab.setImageResource(R.drawable.ic_play);
-
-        stepsTV.setText(String.valueOf(stepCount));
+        stepGoalTV = findViewById(R.id.stepGoal);
         progressBar = findViewById(R.id.progressBar2);
 
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (!running) {
-                    running = true;
-                    fab.setImageResource(R.drawable.ic_pause);
-                    Toast.makeText(StepCounter.this, "Counter started...", Toast.LENGTH_SHORT).show();
-                    startCounting();
-                } else {
-                    running = false;
-                    fab.setImageResource(R.drawable.ic_play);
-                    Toast.makeText(StepCounter.this, "Counter Pause...", Toast.LENGTH_SHORT).show();
+        stepsTV = findViewById(R.id.TVSteps);
 
-                    lastStepCount = stepCount;
-                }
+        int storedStepCount = getStepCountFromSharedPreference();
+
+        //private FloatingActionButton fab;
+        // Initialize the step count to zero
+        stepsTV.setText(String.valueOf(storedStepCount));
+
+        // Register the BroadcastReceiver to listen for step count updates
+        IntentFilter filter = new IntentFilter("step_count_updated");
+        registerReceiver(stepCountUpdateReceiver, filter);
+
+
+
+        Spinner spinnerStepGoal = findViewById(R.id.spinnerStepGoal);
+        ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(this, R.array.step_goal_options, android.R.layout.simple_spinner_item);
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        spinnerStepGoal.setAdapter(adapter);
+
+        spinnerStepGoal.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parentView, View selectedItemView, int position, long id) {
+                String selectedStepGoal = (String) parentView.getItemAtPosition(position);
+                // Convert the selectedStepGoal to an integer and set it as the stepsGoal
+                stepsGoal = Integer.parseInt(selectedStepGoal);
+                stepGoalTV.setText(""+stepsGoal);
+                updateProgressBar(storedStepCount, stepsGoal, progressBar);
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parentView) {
             }
         });
     }
 
-    private void startCounting() {
-        running = true;
+    private int getStepCountFromSharedPreference() {
+        SharedPreferences sharedPreferences = getSharedPreferences("StepCounterPrefs", Context.MODE_PRIVATE);
 
-        if (stepDetectorSensor == null) {
-            Toast.makeText(this, "Step detector sensor not found", Toast.LENGTH_SHORT).show();
-        } else {
 
-            stepCount = lastStepCount;
-            sensorManager.registerListener(this, stepDetectorSensor, SensorManager.SENSOR_DELAY_NORMAL);
-        }
+        return sharedPreferences.getInt("stepCount", 0);
     }
 
-    @Override
-    public void onSensorChanged(SensorEvent event) {
-        if (event.sensor.getType() == Sensor.TYPE_STEP_DETECTOR) {
-            if (running) {
-                // Increment the step count for each step detected
-                stepCount++;
-                stepsTV.setText(String.valueOf(stepCount));
-                progressBar.setProgress(stepCount);
+    private void updateProgressBar(int currentStepCount, int goal, ProgressBar progressBar) {
+        int stepCounterProgress = (int)(((float) currentStepCount / goal) * 100);
+        progressBar.setProgress(stepCounterProgress);
+    }
+
+    private BroadcastReceiver stepCountUpdateReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            if (intent.getAction().equals("step_count_updated")) {
+                // Handle the step count update here
+                int updatedStepCount = intent.getIntExtra("stepCount", 0);
+                stepsTV.setText(String.valueOf(updatedStepCount));
+                updateProgressBar(updatedStepCount, stepsGoal, progressBar);
             }
         }
-    }
+    };
 
-    @Override
-    public void onAccuracyChanged(Sensor sensor, int accuracy) {
+    protected void onDestroy() {
+        super.onDestroy();
 
+        // Unregister the BroadcastReceiver when the activity is destroyed
+        unregisterReceiver(stepCountUpdateReceiver);
     }
 
 }

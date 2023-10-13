@@ -1,15 +1,12 @@
 package com.vigyat.fitnessappprototype;
 
 import androidx.appcompat.app.AppCompatActivity;
-
-import android.animation.ObjectAnimator;
 import android.media.MediaPlayer;
 import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.view.View;
 import android.widget.ProgressBar;
 import android.widget.TextView;
-
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 public class Meditation extends AppCompatActivity {
@@ -19,7 +16,6 @@ public class Meditation extends AppCompatActivity {
     TextView timerTextView;
     boolean isTimerRunning = false;
     MediaPlayer mediaPlayer;
-    //int progress = 0;
 
 
     @Override
@@ -31,7 +27,6 @@ public class Meditation extends AppCompatActivity {
         timerTextView = findViewById(R.id.timerTextView);
         btn = findViewById(R.id.btn);
         mediaPlayer = MediaPlayer.create(getApplicationContext(),R.raw.meditation_music);
-        //progressBar.setProgress(0);
 
         btn.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -48,8 +43,6 @@ public class Meditation extends AppCompatActivity {
 
                         } else {
                             btn.setImageResource(R.drawable.ic_pause);
-
-
 
                             mediaPlayer = MediaPlayer.create(getApplicationContext(),R.raw.meditation_music);
                             mediaPlayer.start();

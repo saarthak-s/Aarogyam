@@ -1,12 +1,10 @@
 package com.vigyat.fitnessappprototype;
 
 import androidx.appcompat.app.AppCompatActivity;
-
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.LinearLayout;
-
 import com.airbnb.lottie.LottieAnimationView;
 
 public class MentalHealth_inner extends AppCompatActivity {
