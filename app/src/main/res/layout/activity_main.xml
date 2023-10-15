@@ -8,6 +8,7 @@
     tools:context=".MainActivity">
 
 
+
     <ImageView
         android:id="@+id/aarogyamImg"
         android:layout_width="300dp"

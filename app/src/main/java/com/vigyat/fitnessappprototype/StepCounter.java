@@ -67,8 +67,6 @@ public class StepCounter extends AppCompatActivity{
 
     private int getStepCountFromSharedPreference() {
         SharedPreferences sharedPreferences = getSharedPreferences("StepCounterPrefs", Context.MODE_PRIVATE);
-
-
         return sharedPreferences.getInt("stepCount", 0);
     }
 

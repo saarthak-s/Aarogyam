@@ -1,5 +1,8 @@
 package com.vigyat.fitnessappprototype;
 
+import android.app.Notification;
+import android.app.NotificationChannel;
+import android.app.NotificationManager;
 import android.app.Service;
 import android.content.Context;
 import android.content.Intent;
@@ -7,25 +10,35 @@ import android.content.SharedPreferences;
 import android.hardware.Sensor;
 import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
+import android.os.Build;
 import android.os.IBinder;
 import android.hardware.SensorManager;
 import android.widget.Toast;
+import androidx.core.app.NotificationCompat;
+
 
 public class StepCounterService extends Service implements SensorEventListener {
 
+    private static final int NOTIFICATION_ID = 1;
+
     private SensorManager sensorManager;
     private Sensor stepDetectorSensor;
-    private int stepCount = 0; // Initialize the step count to zero
+    private int stepCount = 0;
 
     @Override
     public void onCreate() {
         super.onCreate();
+
         sensorManager = (SensorManager) getSystemService(SENSOR_SERVICE);
         stepDetectorSensor = sensorManager.getDefaultSensor(Sensor.TYPE_STEP_DETECTOR);
+
+        SharedPreferences sharedPreferences = getSharedPreferences("StepCounterPrefs", Context.MODE_PRIVATE);
+        stepCount = sharedPreferences.getInt("stepCount", 0);
     }
 
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
+        createNotification();
         startCounting();
         return START_STICKY; // Service will be restarted if it gets terminated by the system
     }
@@ -41,6 +54,7 @@ public class StepCounterService extends Service implements SensorEventListener {
     @Override
     public void onSensorChanged(SensorEvent event) {
         if (event.sensor.getType() == Sensor.TYPE_STEP_DETECTOR) {
+
             // Increment the step count for each step detected
             stepCount++;
             saveStepCountToSharedPreference(stepCount);
@@ -63,7 +77,6 @@ public class StepCounterService extends Service implements SensorEventListener {
         sensorManager.unregisterListener(this);
     }
 
-
     private void saveStepCountToSharedPreference(int stepCount) {
         SharedPreferences sharedPreferences = getSharedPreferences("StepCounterPrefs", Context.MODE_PRIVATE);
         SharedPreferences.Editor editor = sharedPreferences.edit();
@@ -75,4 +88,27 @@ public class StepCounterService extends Service implements SensorEventListener {
         intent.putExtra("stepCount", stepCount);
         sendBroadcast(intent);
     }
+
+    private void createNotification() {
+        // Create a notification channel (required for Android Oreo and above)
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            NotificationChannel channel = new NotificationChannel("step_counter_channel",
+                    "Step Counter Channel",
+                    NotificationManager.IMPORTANCE_DEFAULT);
+            NotificationManager notificationManager = getSystemService(NotificationManager.class);
+            notificationManager.createNotificationChannel(channel);
+        }
+
+        // Create the notification
+        NotificationCompat.Builder builder = new NotificationCompat.Builder(this, "step_counter_channel")
+                .setSmallIcon(R.drawable.ic_app_logo)
+                .setContentTitle("Step Counter")
+                .setContentText("Counting Steps")
+                .setPriority(NotificationCompat.PRIORITY_DEFAULT);
+
+        // Build the notification and show it
+        Notification notification = builder.build();
+        startForeground(NOTIFICATION_ID, notification);
+    }
+
 }

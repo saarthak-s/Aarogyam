@@ -4,15 +4,11 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
+import androidx.work.PeriodicWorkRequest;
+import androidx.work.WorkManager;
 
-import android.content.Context;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
-import android.hardware.Sensor;
-import android.hardware.SensorEvent;
-import android.hardware.SensorEventListener;
-import android.hardware.SensorManager;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -20,20 +16,21 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.Manifest;
-import android.widget.Toast;
 
 import com.airbnb.lottie.LottieAnimationView;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 
+import java.util.Calendar;
+import java.util.concurrent.TimeUnit;
+
 public class MainActivity extends AppCompatActivity {
 
 
-
-    int lastStepCount = 0;
     private static final int REQUEST_ACTIVITY_RECOGNITION_PERMISSION = 1;
 
-    private LinearLayout exerciseLL,stepCounterLL;
+    private LinearLayout exerciseLL, stepCounterLL;
+
 
     private LottieAnimationView exerciseLAV, counterLAV;
     private ImageView imageView;
@@ -46,6 +43,8 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+
+
         //Check if the permission is granted
         if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACTIVITY_RECOGNITION)
                 != PackageManager.PERMISSION_GRANTED) {
@@ -54,26 +53,20 @@ public class MainActivity extends AppCompatActivity {
             ActivityCompat.requestPermissions(this,
                     new String[]{Manifest.permission.ACTIVITY_RECOGNITION},
                     REQUEST_ACTIVITY_RECOGNITION_PERMISSION);
-        } else {
-            // Permission is already granted, continue with your app's functionality.
         }
         auth = FirebaseAuth.getInstance();
 
         user = auth.getCurrentUser();
-        if(user == null){
+        if (user == null) {
             Intent i = new Intent(getApplicationContext(), Login.class);
             startActivity(i);
             finish();
 
         }
 
-        SharedPreferences sharedPreferences = getSharedPreferences("StepCounterPrefs", MODE_PRIVATE);
-        // Clear the shared preference when the activity is destroyed (app is closed)
-        if (sharedPreferences != null) {
-            SharedPreferences.Editor editor = sharedPreferences.edit();
-            editor.clear(); // Clear all values in the shared preference
-            editor.apply();
-        }
+        Intent serviceIntent = new Intent(this, StepCounterService.class);
+        startService(serviceIntent);
+
 
         imageView = findViewById(R.id.aarogyamImg);
 
@@ -82,8 +75,29 @@ public class MainActivity extends AppCompatActivity {
         exerciseLAV = findViewById(R.id.LAVExercise);
         stepCounterLL = findViewById(R.id.idLLstepCounter);
 
-        Intent serviceIntent = new Intent(this, StepCounterService.class);
-        startService(serviceIntent);
+        Calendar now = Calendar.getInstance();
+        Calendar midnight = Calendar.getInstance();
+        midnight.set(Calendar.HOUR_OF_DAY, 11);
+        midnight.set(Calendar.MINUTE, 45);
+        midnight.set(Calendar.SECOND, 0);
+
+        if (now.after(midnight)) {
+            midnight.add(Calendar.DATE, 1);
+        }
+
+        long initialDelay = midnight.getTimeInMillis() - now.getTimeInMillis();
+
+        PeriodicWorkRequest clearSharedPreferencesWork = new PeriodicWorkRequest.Builder(
+                ResetStepCounter.class,
+                1, TimeUnit.DAYS
+        )
+                .setInitialDelay(initialDelay, TimeUnit.MILLISECONDS)
+                .build();
+
+        WorkManager.getInstance(this).enqueue(clearSharedPreferencesWork);
+
+//        Intent serviceIntent = new Intent(this, StepCounterService.class);
+//        startService(serviceIntent);
 
         exerciseLL.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -91,8 +105,6 @@ public class MainActivity extends AppCompatActivity {
 
                 Intent i1 = new Intent(getApplicationContext(), MentalHealth_inner.class);
                 startActivity(i1);
-
-
             }
         });
 
@@ -102,12 +114,11 @@ public class MainActivity extends AppCompatActivity {
 
                 Intent i = new Intent(getApplicationContext(), StepCounter.class);
                 startActivity(i);
-
-
             }
         });
 
     }
+
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
@@ -122,19 +133,19 @@ public class MainActivity extends AppCompatActivity {
     }
 
     @Override
-    public boolean onCreateOptionsMenu(Menu menu){
+    public boolean onCreateOptionsMenu(Menu menu) {
 
-        getMenuInflater().inflate(R.menu.menu,menu);
+        getMenuInflater().inflate(R.menu.menu, menu);
 
         return super.onCreateOptionsMenu(menu);
     }
 
     @Override
-    public boolean onOptionsItemSelected(@NonNull MenuItem item){
+    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
 
         int itemId = item.getItemId();
 
-        if(itemId == R.id.Btn){
+        if (itemId == R.id.Btn) {
             FirebaseAuth.getInstance().signOut();
             Intent i = new Intent(getApplicationContext(), Login.class);
             startActivity(i);
@@ -142,6 +153,4 @@ public class MainActivity extends AppCompatActivity {
         }
         return super.onOptionsItemSelected(item);
     }
-
-
 }
