@@ -103,7 +103,7 @@ public class StepCounterService extends Service implements SensorEventListener {
         NotificationCompat.Builder builder = new NotificationCompat.Builder(this, "step_counter_channel")
                 .setSmallIcon(R.drawable.ic_app_logo)
                 .setContentTitle("Step Counter")
-                .setContentText("Counting Steps")
+                .setContentText("Counting Steps...")
                 .setPriority(NotificationCompat.PRIORITY_DEFAULT);
 
         // Build the notification and show it
