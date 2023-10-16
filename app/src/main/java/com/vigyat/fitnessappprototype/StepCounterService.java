@@ -10,12 +10,15 @@ import android.content.SharedPreferences;
 import android.hardware.Sensor;
 import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
-import android.os.Build;
 import android.os.IBinder;
 import android.hardware.SensorManager;
 import android.widget.Toast;
 import androidx.core.app.NotificationCompat;
+import androidx.work.PeriodicWorkRequest;
+import androidx.work.WorkManager;
 
+import java.util.Calendar;
+import java.util.concurrent.TimeUnit;
 
 public class StepCounterService extends Service implements SensorEventListener {
 
@@ -34,6 +37,7 @@ public class StepCounterService extends Service implements SensorEventListener {
 
         SharedPreferences sharedPreferences = getSharedPreferences("StepCounterPrefs", Context.MODE_PRIVATE);
         stepCount = sharedPreferences.getInt("stepCount", 0);
+
     }
 
     @Override
@@ -91,24 +95,22 @@ public class StepCounterService extends Service implements SensorEventListener {
 
     private void createNotification() {
         // Create a notification channel (required for Android Oreo and above)
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            NotificationChannel channel = new NotificationChannel("step_counter_channel",
-                    "Step Counter Channel",
-                    NotificationManager.IMPORTANCE_DEFAULT);
-            NotificationManager notificationManager = getSystemService(NotificationManager.class);
-            notificationManager.createNotificationChannel(channel);
-        }
+        NotificationChannel channel = new NotificationChannel("step_counter_channel",
+                "Step Counter Channel",
+                NotificationManager.IMPORTANCE_DEFAULT);
+        NotificationManager notificationManager = getSystemService(NotificationManager.class);
+        notificationManager.createNotificationChannel(channel);
 
         // Create the notification
         NotificationCompat.Builder builder = new NotificationCompat.Builder(this, "step_counter_channel")
                 .setSmallIcon(R.drawable.ic_app_logo)
                 .setContentTitle("Step Counter")
                 .setContentText("Counting Steps")
-                .setPriority(NotificationCompat.PRIORITY_DEFAULT);
+                .setPriority(NotificationCompat.PRIORITY_MAX);
 
         // Build the notification and show it
         Notification notification = builder.build();
-        startForeground(NOTIFICATION_ID, notification);
+        startForeground(1, notification);
     }
 
 }

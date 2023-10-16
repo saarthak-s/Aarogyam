@@ -9,6 +9,7 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 import androidx.annotation.NonNull;
+import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.recyclerview.widget.RecyclerView;
 import java.util.List;
 
@@ -38,7 +39,7 @@ public class YogaListAdapter extends RecyclerView.Adapter<YogaListAdapter.MyView
         holder.imageView.setImageResource(yoga.getYogaImage());
 
 
-        holder.btn.setOnClickListener(new View.OnClickListener() {
+        holder.yogaLayout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
 
@@ -65,14 +66,17 @@ public class YogaListAdapter extends RecyclerView.Adapter<YogaListAdapter.MyView
 
         ImageView imageView;
         TextView textView;
-        Button btn;
+
+        ConstraintLayout yogaLayout;
+
 
 
         public MyViewHolder(@NonNull View itemView) {
             super(itemView);
             imageView = itemView.findViewById(R.id.yogaImage);
             textView = itemView.findViewById(R.id.yogaName);
-            btn = itemView.findViewById(R.id.yogaButton);
+            yogaLayout = itemView.findViewById(R.id.yogaLayout);
+
 
         }
     }

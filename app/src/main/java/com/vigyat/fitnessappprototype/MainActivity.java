@@ -7,8 +7,11 @@ import androidx.core.content.ContextCompat;
 import androidx.work.PeriodicWorkRequest;
 import androidx.work.WorkManager;
 
+import android.app.AlarmManager;
+import android.app.PendingIntent;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.os.Build;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -28,6 +31,7 @@ public class MainActivity extends AppCompatActivity {
 
 
     private static final int REQUEST_ACTIVITY_RECOGNITION_PERMISSION = 1;
+    private static final int REQUEST_POST_NOTIFICATION_PERMISSION = 2;
 
     private LinearLayout exerciseLL, stepCounterLL;
 
@@ -44,7 +48,6 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
 
-
         //Check if the permission is granted
         if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACTIVITY_RECOGNITION)
                 != PackageManager.PERMISSION_GRANTED) {
@@ -53,6 +56,11 @@ public class MainActivity extends AppCompatActivity {
             ActivityCompat.requestPermissions(this,
                     new String[]{Manifest.permission.ACTIVITY_RECOGNITION},
                     REQUEST_ACTIVITY_RECOGNITION_PERMISSION);
+        }
+
+        if (ContextCompat.checkSelfPermission(this, Manifest.permission.POST_NOTIFICATIONS) != PackageManager.PERMISSION_GRANTED) {
+            ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.POST_NOTIFICATIONS}, REQUEST_POST_NOTIFICATION_PERMISSION);
+            // You have the permission, you can proceed with your task.
         }
         auth = FirebaseAuth.getInstance();
 
@@ -64,8 +72,8 @@ public class MainActivity extends AppCompatActivity {
 
         }
 
-        Intent serviceIntent = new Intent(this, StepCounterService.class);
-        startService(serviceIntent);
+//        Intent serviceIntent = new Intent(this, StepCounterService.class);
+//        startService(serviceIntent);
 
 
         imageView = findViewById(R.id.aarogyamImg);
@@ -77,8 +85,8 @@ public class MainActivity extends AppCompatActivity {
 
         Calendar now = Calendar.getInstance();
         Calendar midnight = Calendar.getInstance();
-        midnight.set(Calendar.HOUR_OF_DAY, 11);
-        midnight.set(Calendar.MINUTE, 45);
+        midnight.set(Calendar.HOUR_OF_DAY, 0);
+        midnight.set(Calendar.MINUTE, 1);
         midnight.set(Calendar.SECOND, 0);
 
         if (now.after(midnight)) {
@@ -96,8 +104,9 @@ public class MainActivity extends AppCompatActivity {
 
         WorkManager.getInstance(this).enqueue(clearSharedPreferencesWork);
 
-//        Intent serviceIntent = new Intent(this, StepCounterService.class);
-//        startService(serviceIntent);
+        Intent serviceIntent = new Intent(this, StepCounterService.class);
+        startService(serviceIntent);
+
 
         exerciseLL.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -130,7 +139,18 @@ public class MainActivity extends AppCompatActivity {
                 // Permission denied, handle accordingly (e.g., show a message or disable functionality).
             }
         }
+
+        if (requestCode == REQUEST_POST_NOTIFICATION_PERMISSION) {
+            if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                // Permission granted, you can proceed with your task.
+            } else {
+                // Permission denied, handle it accordingly.
+            }
+        }
     }
+
+
+
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {

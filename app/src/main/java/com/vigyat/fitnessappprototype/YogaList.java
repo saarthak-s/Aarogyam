@@ -1,6 +1,7 @@
 package com.vigyat.fitnessappprototype;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import android.os.Bundle;
@@ -34,5 +35,7 @@ public class YogaList extends AppCompatActivity {
 
          recyclerView.setLayoutManager(layoutManager);
          recyclerView.setAdapter(adapter);
+
+
     }
 }
